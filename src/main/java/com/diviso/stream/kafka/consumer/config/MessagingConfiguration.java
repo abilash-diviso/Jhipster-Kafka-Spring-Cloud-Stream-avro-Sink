@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.cloud.stream.schema.client.EnableSchemaRegistryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.annotation.InboundChannelAdapter;
 import org.springframework.integration.core.MessageSource;
@@ -16,9 +17,9 @@ import org.springframework.messaging.support.GenericMessage;
  * This works out-of-the-box if you use the Docker Compose configuration at "src/main/docker/kafka.yml".
  *
  * See http://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/
- * for the official Spring Cloud Stream documentation.
+ * for the official Spring Cloud StreSourceam documentation.
  */
-@EnableBinding(value = { Source.class })
+@EnableBinding( value=AppointmentConsumerConfig.class)
 public class MessagingConfiguration {
 
     /**
@@ -26,11 +27,11 @@ public class MessagingConfiguration {
      *
      * In order to see the test messages, you can use the Kafka command-line client:
      * "./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topic-jhipster --from-beginning".
-     */
+     *//*
     @Bean
     @InboundChannelAdapter(value = Source.OUTPUT)
     public MessageSource<String> timerMessageSource() {
         return () -> new GenericMessage<>("Test message from JHipster sent at " +
             new SimpleDateFormat().format(new Date()));
-    }
+    }*/
 }

@@ -24,8 +24,8 @@ eureka:
         prefer-ip-address: true
     client:
         service-url:
-            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
-
+            defaultZone: http://104.196.121.188:8761/eureka
+        enabled: false
 spring:
     profiles:
         active: dev
@@ -41,16 +41,53 @@ spring:
         stream:
             kafka:
                 binder:
-                    brokers: localhost
-                    zk-nodes: localhost
+                    brokers:  35.243.202.146
+                    zk-nodes: 35.243.202.146
+                streams:
+                  binder:
+                    brokers: 35.243.202.146
+                    configuration:
+                      schema.registry.url: http://35.243.202.146:8081
+                      commit.interval.ms: 1000
+                      default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                      default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde 
+                  bindings:
+                    sensor:
+                      consumer:
+                           keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                           valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             bindings:
-                output:
-                    destination: topic-jhipster
+                appointment:
+                    consumer:
+                      useNativeDecoding: true
+                    destination: appointment
+#                    contentType: application/*+avro
+                    group: appointmentsnew-groups
+                sensor:
+                    destination: mysensornewest
+                    consumer:
+                      useNativeDecoding: true
+#                    contentType: application/*+avro
+                    group: mysensorINGNEW-groups
+                contact:
+                    destination: contactnewest-ayoos
+                    consumer:
+                      useNativeDecoding: true
+#                    contentType: application/*+avro
+                    group: contactnew-groups
+                customer: 
+                    consumer:
+                      useNativeDecoding: true
+                    destination: customernewest-ayoos
+#                    contentType: application/*+avro
+                    group: customernew-groups
+            schemaRegistryClient:
+                endpoint: http://localhost:8081
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/JhipsterCloudStreamKafkaConsumer?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
-        password:
+        password: root
         hikari:
             auto-commit: false
             data-source-properties:
@@ -76,7 +113,14 @@ spring:
         elasticsearch:
             properties:
                 path:
-                    home: target/elasticsearch
+                    logs: target/elasticsearch/log
+                    data: target/elasticsearch/data
+                transport:
+                    tcp:
+                       connect_timeout: 12000s
+        jest:
+             readTimeout: 10000
+             uri: http://35.243.202.146:9200    
     liquibase:
         contexts: dev
     mail:
@@ -105,7 +149,7 @@ spring:
 # at chrome://flags/#allow-insecure-localhost
 # ===================================================================
 server:
-    port: 8095
+    port: 8096
 #    ssl:
 #        key-store: classpath:config/tls/keystore.p12
 #        key-store-password: password
